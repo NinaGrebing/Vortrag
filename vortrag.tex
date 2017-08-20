@@ -1,0 +1,290 @@
+\documentclass[presentation,table]{beamer}
+%Fuer Erzeugung der Handouts:
+%\documentclass[handout]{beamer}
+
+\usepackage{ifthen}
+\newboolean{presentation} %Deklaration einer boolschen Variable
+\setboolean{presentation}{true}
+
+\mode<handout>{
+	\usepackage{pgf}
+	\usepackage{pgfpages}
+	\pgfpagesuselayout{4 on 1}[a4paper,border shrink=5mm, landscape]	
+}
+\mode<presentation>{
+	\usetheme{Juelich}
+}
+
+%Fuer farbige Texte
+\usepackage{color}
+\definecolor{darkgreen}{rgb}{0,0.5,0}
+\definecolor{middlegray}{rgb}{0.5,0.5,0.5}
+ \definecolor{lightgray}{rgb}{0.8,0.8,0.8}
+ \definecolor{orange}{rgb}{0.8,0.3,0.3}
+ \definecolor{yac}{rgb}{0.6,0.6,0.1}
+ \definecolor{lred}{rgb}{1,0.7,0.7}
+ \definecolor{lgreen}{rgb}{0.7,1,0.7}
+\newcommand{\minus}{{\mbox{\begin{large}\color{red}\textbf{--}\color{black}\end{large}} }}
+\newcommand{\plus}{{\mbox{\begin{large}\color{darkgreen}\textbf{+}\color{black}\end{large}} }}
+
+\setbeamertemplate{slide counter}[showall][]
+
+\newcommand{\noheader}{
+\setbeamertemplate{headline}
+{%
+\begin{beamercolorbox}[leftskip=1em,ht=2.5mm,dp=0mm]{header}
+\end{beamercolorbox}
+\begin{beamercolorbox}[leftskip=1em,ht=7.5mm,dp=0mm]{header}
+\end{beamercolorbox}
+}
+}
+
+\newcommand{\makeheader}{
+\setbeamertemplate{headline}
+{
+  \begin{beamercolorbox}[leftskip=1em,ht=2.5mm,dp=0mm]{header}
+    \usebeamercolor{fzjblue50}\colorbox{bg}{ \color{white}\textbf{\thepart.~\insertpart}}
+  \end{beamercolorbox}
+  \begin{beamercolorbox}[leftskip=1em,ht=7.5mm,dp=0mm]{header}
+  \end{beamercolorbox}
+}
+}
+
+\newcommand{\mymakepart}{
+\noheader
+\makepart
+\makeheader
+}
+
+\usepackage{listings}
+
+\usepackage{helvet}
+%Deutsche Pakete, deutsche Worte fuer Inhaltsverzeichnis und Zusammenfassung
+\usepackage[ngerman]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{ucs}
+\usepackage{lmodern}
+%Fuer Einbinden von Grafiken
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{longtable}
+
+
+%\title{\Large Vergleich zwischen Vizard VR Toolkit und \mbox{Unreal Engine 4} als Plattformen fuer virtuelle \\Experimente im Bereich der Fussgaengerdynamik unter Nutzung der Oculus Rift}
+\subtitle{\Large Entwicklung eines Softwaresystems zur Carsharing Simulation}
+\author{Nina Grebing}
+\institute{Institut für Bio- und Geowissenschaften}
+\date{23. August 2017}
+
+\begin{document}
+
+\noheader 
+
+\maketitle 
+
+\begin{frame}
+	\frametitle{Inhalt}
+	\begin{enumerate}
+		\item \hyperlink{vorstellung}{Vorstellung}
+		\item \hyperlink{aufgabenanalyse}{Aufgabenanalyse}
+		\item \hyperlink{algorithmus}{Algorithmus}		
+		\item \hyperlink{konzept}{Programmkonzept}
+		\item \hyperlink{tests}{Tests}
+		\item \hyperlink{fazit}{Fazit}
+	\end{enumerate}
+\end{frame}
+
+\part{Vorstellung}
+\label{vorstellung}
+\mymakepart
+
+\begin{frame}
+	\frametitle{Forschungszentrum Jülich - IBG-1}
+	\begin{minipage}[l]{0.5\textwidth}
+		\begin{itemize}
+			\item Forschung in den Bereichen Energie, Umwelt, Medizin, Simulationswissenschaften und Nanotechnologie
+			\item 10 Institute (über 60 Institutsbereiche)
+			\item Über 5000 Mitarbeiter
+			\item Institut für Bio- und Geowissenschaften
+		\end{itemize}
+	\end{minipage}
+	\begin{minipage}[l]{0.5\textwidth}
+		\begin{figure}
+%			\includegraphics[height=4cm]{./../daten/fzj.png}
+		\end{figure}
+	\end{minipage}	
+\end{frame}
+
+\begin{frame}
+	\frametitle{Praktische Arbeit}
+	\begin{block}{Aufgaben während der Ausbildungszeit}
+		\begin{itemize}
+			\item Entwicklung eines Konzeptes zur Normalisierung einer Datenbank
+			\item Entwurf und Implementierung von PostgreSQL-Datenbanken
+			\item Konvertierung von MSSQLServer-Datenbanken nach PostgreSQL
+			\item Entwicklung von Webanwendungen
+		\end{itemize}
+	\end{block}
+\end{frame}
+
+\part{Aufgabenanalyse}
+\label{aufgabenanalyse}
+\mymakepart
+
+\begin{frame}
+	\frametitle{Aufgabenstellung}
+	\begin{itemize}
+		\item Simulation und Auswertung des Kundenverhaltens eines Carsharing Unternehmens
+		\item Stadt in m $\times$ m Gebiete unterteilt
+		\item Verlauf von Nachfrage und Abstellung der Autos für jedes Gebiet als monoton wachsendes Polynom maximal 4. Grades, positiv auf dem Intervall [0;24]
+		\item Einlesen der Daten aus einer Datei
+		\item 
+	\end{itemize}
+	 
+	
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{Aufgabenstellung}
+	\begin{itemize}
+		\item Bestimmen des maximalen Bedarfs und des Endzustandes
+	\end{itemize}
+	\begin{block}{Präzisierungen}
+		\begin{itemize}
+			\item Minimum 1 Quadrant
+			\item Maximum 10 Quadranten
+			\item Abbruchgenauigkeit der Bisektion: $e < 10^{-4}$
+		\end{itemize}
+	\end{block}
+	
+\end{frame}
+
+\part{Algorithmus}
+\label{algorithmus}
+\mymakepart
+
+\begin{frame}[fragile]
+	\frametitle{Programmablauf}
+	\begin{columns}
+		%linke Spalte
+		\column{5cm}
+		\begin{itemize}[<+->]
+			\item Einlesen der Daten
+			\item Erzeugen der Teilgebiete mit den jeweiligen Polynomen
+			\item Erzeugen der Simulation mit den Teilgebieten
+			\item Berechnung des Bedarf für jedes Teilgebiet
+			\item Ausgabe der Ergebnisse
+		\end{itemize}
+		
+		
+		
+		\lstset{
+		frame=single,
+		basicstyle=\tiny\ttfamily,
+		linewidth=\textwidth,
+		numbers=none
+		}
+		
+		%rechte Spalte
+		\column{5cm}
+		\begin{onlyenv}<1>
+			\begin{lstlisting}
+			fdsfsf
+			\end{lstlisting}
+		\end{onlyenv}
+		\only<2>{
+			\begin{itemize}
+				\item 
+			\end{itemize}
+		}
+		\only<3>{
+			\begin{itemize}
+				\item 
+			\end{itemize}
+		}
+		\only<4>{
+			\begin{itemize}
+				\item 
+			\end{itemize}
+		}
+		\begin{onlyenv}<5>
+			\begin{lstlisting}
+			
+			\end{lstlisting}
+		\end{onlyenv}
+		
+	\end{columns}
+\end{frame}
+
+
+
+\part{Programmkonzept}
+\label{konzept}
+\mymakepart
+
+\begin{frame}
+	\frametitle{UML-Diagramm}
+	
+	
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{}
+	
+	
+\end{frame}
+
+
+
+
+\part{Test}
+\label{test}
+\mymakepart
+
+\begin{frame}
+	\frametitle{Teststrategie}
+	
+	
+\end{frame}
+
+\begin{frame}
+	\frametitle{Testklassen}
+	
+	
+\end{frame}
+
+\part{Fazit}
+\label{fazit}
+\mymakepart
+
+\begin{frame}
+	\frametitle{Ausblick}
+	
+	
+\end{frame}
+
+
+\begin{frame}[plain]
+	\LARGE\textcolor{fzjblue50}{Vielen Dank für Ihre Aufmerksamkeit!}
+\end{frame}
+
+
+\setbeamertemplate{footer element3}{\empty}
+\setbeamertemplate{footer element4}{}
+
+\part{Zusatzinformationen}
+\label{zusatz}
+\mymakepart
+
+\begin{frame}
+	\frametitle{Sequenzdiagramm}
+
+\end{frame}
+
+
+\addtocounter{framenumber}{-3}
+
+\end{document}
