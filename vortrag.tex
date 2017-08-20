@@ -79,6 +79,13 @@
 
 \begin{document}
 
+\lstset{
+	frame=single,
+	basicstyle=\tiny\ttfamily,
+	linewidth=\textwidth,
+	numbers=none
+}
+
 \noheader 
 
 \maketitle 
@@ -91,7 +98,7 @@
 		\item \hyperlink{algorithmus}{Algorithmus}		
 		\item \hyperlink{konzept}{Programmkonzept}
 		\item \hyperlink{tests}{Tests}
-		\item \hyperlink{fazit}{Fazit}
+		\item \hyperlink{fazit}{Ausblick}
 	\end{enumerate}
 \end{frame}
 
@@ -111,7 +118,7 @@
 	\end{minipage}
 	\begin{minipage}[l]{0.5\textwidth}
 		\begin{figure}
-%			\includegraphics[height=4cm]{./../daten/fzj.png}
+%			\includegraphics[height=4cm]{./fzj.png}
 		\end{figure}
 	\end{minipage}	
 \end{frame}
@@ -136,10 +143,14 @@
 	\frametitle{Aufgabenstellung}
 	\begin{itemize}
 		\item Simulation und Auswertung des Kundenverhaltens eines Carsharing Unternehmens
-		\item Stadt in m $\times$ m Gebiete unterteilt
-		\item Verlauf von Nachfrage und Abstellung der Autos für jedes Gebiet als monoton wachsendes Polynom maximal 4. Grades, positiv auf dem Intervall [0;24]
+		\item Stadt in m $\times$ m Teilgebiete unterteilt
+		\item Verlauf von Nachfrage und Abstellung der Autos für jedes Gebiet als monoton wachsende Polynome maximal 4. Grades, positiv auf dem Intervall [0;24]
 		\item Einlesen der Daten aus einer Datei
-		\item 
+		\item Ermitteln der Bedarfsänderungen für jedes Gebiet
+		\begin{itemize}
+			\item Integrale der Polynome bilden
+			\item Ganzzahlübergänge durch Bisektion näherungsweise bestimmen
+		\end{itemize}
 	\end{itemize}
 	 
 	
@@ -149,12 +160,16 @@
 \begin{frame}
 	\frametitle{Aufgabenstellung}
 	\begin{itemize}
-		\item Bestimmen des maximalen Bedarfs und des Endzustandes
+		\item Ausgabe der Ergebnisse in eine Datei
+		\begin{itemize}
+			\item Liste aller Abstellungen und Nachfragen sortiert nach Uhrzeit (Abstellungen zuerst)
+			\item maximaler Bedarf und Endzustand
+		\end{itemize}
 	\end{itemize}
 	\begin{block}{Präzisierungen}
 		\begin{itemize}
-			\item Minimum 1 Quadrant
-			\item Maximum 10 Quadranten
+			\item Minimum 1 Gebiet
+			\item Maximum 10 Gebiete
 			\item Abbruchgenauigkeit der Bisektion: $e < 10^{-4}$
 		\end{itemize}
 	\end{block}
@@ -167,56 +182,90 @@
 
 \begin{frame}[fragile]
 	\frametitle{Programmablauf}
-	\begin{columns}
-		%linke Spalte
-		\column{5cm}
-		\begin{itemize}[<+->]
-			\item Einlesen der Daten
-			\item Erzeugen der Teilgebiete mit den jeweiligen Polynomen
-			\item Erzeugen der Simulation mit den Teilgebieten
-			\item Berechnung des Bedarf für jedes Teilgebiet
-			\item Ausgabe der Ergebnisse
-		\end{itemize}
-		
-		
-		
-		\lstset{
-		frame=single,
-		basicstyle=\tiny\ttfamily,
-		linewidth=\textwidth,
-		numbers=none
-		}
-		
-		%rechte Spalte
-		\column{5cm}
-		\begin{onlyenv}<1>
-			\begin{lstlisting}
-			fdsfsf
-			\end{lstlisting}
-		\end{onlyenv}
-		\only<2>{
-			\begin{itemize}
-				\item 
+		\begin{columns}
+		\begin{column}{0.45\textwidth}
+			\begin{itemize}[<+->]
+				\item Einlesen der Daten
+				\item Erzeugen der Simulation mit den Teilgebieten
+				\item Berechnung der Bedarfsänderungen für jedes Teilgebiet
+				\item Bestimmen des maximalen Bedarfs und des Endzustandes
+				\item Ausgabe der Ergebnisse
 			\end{itemize}
-		}
-		\only<3>{
-			\begin{itemize}
-				\item 
-			\end{itemize}
-		}
-		\only<4>{
-			\begin{itemize}
-				\item 
-			\end{itemize}
-		}
-		\begin{onlyenv}<5>
-			\begin{lstlisting}
-			
-			\end{lstlisting}
-		\end{onlyenv}
-		
+		\end{column}
+		\begin{column}{0.55\textwidth}
+			\begin{onlyenv}<1>
+				\begin{lstlisting}
+# AHausen
+# m
+1
+# Polynome Nachfrage
+0 0.2023761 -0.0287711 0.0016925 -0.0000352
+# Polynome Abstellungen
+0.434782 0 0 0 0
+				\end{lstlisting}
+			\end{onlyenv}
+			\only<2>{
+				\begin{itemize}
+					\item Teilgebiete anlegen
+					\item Bestimmen der Polynome für Nachfragen und Abstellungen				
+				\end{itemize}
+			}
+			\only<3>{
+				\begin{itemize}
+					\item Nachfrage- und Abstellungs-Änderungen berechnen über Bisektion
+					\item zeitlich sortierte Liste aller Änderungen für jedes Teilgebiet erstellen
+					\item Bedarfsänderungen aller Gebiete in einer Liste aufsteigend nach Zeitpunkt sortieren
+				\end{itemize}
+			}
+			\only<4>{
+				\begin{itemize}
+					\item maximal erreichten Bedarf bestimmen
+					\item End-Bedarf bestimmen
+				\end{itemize}
+			}
+			\begin{onlyenv}<5>
+				\begin{lstlisting}
+# AHausen
+Abstellung in Q_11 zu t=2,30
+Nachfrage in Q_11 zu t=3,76
+Abstellung in Q_11 zu t=4,60
+Nachfrage in Q_11 zu t=5,87
+Abstellung in Q_11 zu t=6,90
+Nachfrage in Q_11 zu t=7,86
+Abstellung in Q_11 zu t=9,20
+Nachfrage in Q_11 zu t=9,89
+Abstellung in Q_11 zu t=11,50
+Nachfrage in Q_11 zu t=11,96
+Abstellung in Q_11 zu t=13,80
+Nachfrage in Q_11 zu t=14,03
+Nachfrage in Q_11 zu t=16,06
+Abstellung in Q_11 zu t=16,10
+Nachfrage in Q_11 zu t=18,06
+Abstellung in Q_11 zu t=18,40
+Nachfrage in Q_11 zu t=20,17
+Abstellung in Q_11 zu t=20,70
+Abstellung in Q_11 zu t=23,00
+Nachfrage in Q_11 zu t=23,43
+Endzustand des Tages:
+0 
+Maximaler Bedarf:
+1 
+				\end{lstlisting}
+			\end{onlyenv}
+		\end{column}
 	\end{columns}
 \end{frame}
+
+\begin{frame}
+	\frametitle{Berechnung der Bedarfsänderungen}
+	
+\end{frame}
+
+\begin{frame}
+	\frametitle{Bisektion}
+	
+\end{frame}
+
 
 
 
@@ -225,45 +274,144 @@
 \mymakepart
 
 \begin{frame}
-	\frametitle{UML-Diagramm}
-	
-	
+	\frametitle{Klassenübersicht}
+	\framesubtitle{MVC}
+	\begin{columns}
+		\begin{column}{0.5\textwidth}
+			\begin{itemize}
+				\item \textbf{Model:} Teilgebiet, Simulation, Polynom
+				\item \textbf{View:} Eingabe, Ausgabe
+				\item \textbf{Controller:} Simulationsabwicklung
+			\end{itemize}
+		\end{column}
+			\begin{column}{0.5\textwidth}
+				\begin{figure}
+%					\includegraphics[width=10cm]{./uml-diagramm.jpg}
+				\end{figure}
+			\end{column}
+	\end{columns}
 \end{frame}
 
 
 \begin{frame}
-	\frametitle{}
-	
-	
+	\frametitle{Klassenübersicht}
+	\framesubtitle{Teilgebiet}
+	\begin{columns}
+		\begin{column}{0.5\textwidth}
+			speichert:
+			\begin{itemize}
+				\item die Polynome für Nachfrage und Abstellung
+				\item die Bedarfsänderungen
+				\item den Endzustand
+				\item den maximalen Bedarf
+			\end{itemize}
+		\end{column}
+		\begin{column}{0.5\textwidth}
+			\begin{figure}
+				%					\includegraphics[width=10cm]{./uml-diagramm.jpg}
+			\end{figure}
+		\end{column}
+	\end{columns}	
+\end{frame}
+
+\begin{frame}
+	\frametitle{Klassenübersicht}
+	\framesubtitle{Simulationsabwicklung}
+	\begin{columns}
+		\begin{column}{0.5\textwidth}
+			berechnet
+			\begin{itemize}
+				\item Integrale
+				\item Bedarf
+				\item Endzustand
+				\item maximalen Bedarf 
+			\end{itemize}
+		\end{column}
+		\begin{column}{0.5\textwidth}
+			\begin{figure}
+				%					\includegraphics[width=10cm]{./uml-diagramm.jpg}
+			\end{figure}
+		\end{column}
+	\end{columns}	
 \end{frame}
 
 
 
 
-\part{Test}
+\part{Tests}
 \label{test}
 \mymakepart
 
 \begin{frame}
 	\frametitle{Teststrategie}
-	
-	
+	\begin{block}{White-Box-Tests}
+		\begin{itemize}
+			\item Test gegen die Implementierung
+			\item alle Programmzweige werden durchlaufen
+		\end{itemize}
+	\end{block}
+	\begin{block}{Testklassen}
+		\begin{itemize}
+			\item Normalfälle
+			\item Sonderfälle
+			\item Fehlerfälle
+		\end{itemize}
+	\end{block}	
 \end{frame}
 
 \begin{frame}
 	\frametitle{Testklassen}
-	
-	
+	\textbf{Normalfälle:}
+	\begin{itemize}
+		\item 2 <= m <= 10
+		\item mindestens eine Nachfrage oder Abstellung in der gesamten Simulation
+		\item höchstens 75 Nachfragen und 75 Abstellungen pro Teilgebiet
+	\end{itemize}
+	\textbf{Sonderfälle:}
+	\begin{itemize}
+		\item m = 1
+		\item Nachfragen und Abstellungen für ein Teilgebiet gleich
+		\item alle Teilgebiete sind äquivalent
+	\end{itemize}
 \end{frame}
 
-\part{Fazit}
+\begin{frame}
+	\frametitle{Testklassen}
+	\textbf{Fehlerfälle:}
+	\begin{itemize}
+		\item m = 0
+		\item m > 10
+		\item Anzahl von Nachfragen/Abstellung für ein Teilgebiet > 75
+		\item keine Bedarfsänderungen in der gesamten Simulation
+		\item erste Zeile der Eingabedatei keine Kommentarzeile
+		\item kein Zahlenwert für m
+		\item kein Zahlenwert für Koeffizienten eines Polynoms
+		\item zu wenig Polynome
+		\item zu viele Nicht-Kommentarzeilen
+		\item zu wenig Koeffizienten für ein Polynom
+		\item zu viele Koeffizienten für ein Polynom
+	\end{itemize}
+\end{frame}
+
+\part{Ausblick}
 \label{fazit}
 \mymakepart
 
 \begin{frame}
-	\frametitle{Ausblick}
-	
-	
+	\frametitle{Erweiterungsmöglichkeiten}
+	\begin{itemize}
+		\item Stadtgebiet auch als Rechteck ermöglichen
+		\item Polynome höheren Grades als 4 zulassen
+		\item Verschiebung der Autos bestimmen und ausgeben
+		\begin{itemize}
+			\item möglichst wenige Verschiebungen
+			\item nach Möglichkeit den Endzustand aller Teilgebiete zu 0 ändern
+		\end{itemize}
+		\item Parallelisierung
+		\begin{itemize}
+			\item Integrale und Bedarfsänderungen der Gebiete können unabhängig voneinander berechnet werden
+		\end{itemize}
+	\end{itemize}
 \end{frame}
 
 
@@ -281,7 +429,9 @@
 
 \begin{frame}
 	\frametitle{Sequenzdiagramm}
-
+	\begin{figure}
+		\includegraphics[width=10cm]{./aufrufhierachie.jpg}
+	\end{figure}
 \end{frame}
 
 
