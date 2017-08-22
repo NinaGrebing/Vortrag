@@ -258,12 +258,47 @@ Maximaler Bedarf:
 
 \begin{frame}
 	\frametitle{Berechnung der Bedarfsänderungen}
-	
+	\begin{itemize}
+		\item Berechnung für jedes Teilgebiet
+		\begin{itemize}
+			\item Berechnung für Nachfragen und Abstellung
+			\item Nullstellenproblem (nächster ganzzahliger Wert wird vom Funktionswert subtrahiert)
+			\begin{itemize}			
+				\item Bisektion im Intervall [$t_0$,$t_1$]
+				\item $t_0$, beginnend mit 0, Stelle der letzten Änderung
+				\item $t_1$ = 24
+			\end{itemize}
+			\item Änderungen der Nachfragen und Abstellungen zusammenfügen und zeitlich sortieren
+		\end{itemize}
+	\item Änderungen aller Teilgebiete zusammenfügen
+	\end{itemize}
 \end{frame}
 
 \begin{frame}
 	\frametitle{Bisektion}
-	
+	\begin{columns}
+		\begin{column}{0.55\textwidth}
+			\begin{itemize}
+				\item bestimme y = Funktionswert an der Stelle x - nächster ganzzahliger Wert
+				\item x = $t_0$ + $\frac{t_1-t_0}{2}$
+				\item Abbruch bei:
+				\begin{itemize}
+					\item |y| < e = $10^{-4}$
+					\item gebe x zurück
+				\end{itemize}
+				\item ansonsten Bisektion erneut durchführen
+				\begin{itemize}
+					\item y < 0: Bisektion für $t_0 = x, t_1 = t_1$
+					\item y > 0: Bisektion für $t_0 = t_0, t_1 = x$
+				\end{itemize}
+			\end{itemize}
+		\end{column}
+		\begin{column}{0.45\textwidth}
+			\begin{figure}
+				\includegraphics[width=5cm]{./bisektion.jpg}
+			\end{figure}
+		\end{column}
+	\end{columns}
 \end{frame}
 
 
